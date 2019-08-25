@@ -1,7 +1,5 @@
-"use strict"
 class Deck {
-  name: any
-  constructor (input: any) {
+  constructor (input) {
     this.name = input;
   }
 }
