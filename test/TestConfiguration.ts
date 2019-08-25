@@ -1,7 +1,7 @@
 require('mocha')
 require('verify-it')
-const chai = require('chai')
+const chaiConfig = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 
-chai.use(chaiAsPromised)
-chai.should()
+chaiConfig.use(chaiAsPromised)
+chaiConfig.should()

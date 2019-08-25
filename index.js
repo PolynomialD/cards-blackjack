@@ -1,1 +1,1 @@
-console.log('Javascript stub, wooo')
+console.log('Hello World')
