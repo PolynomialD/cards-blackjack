@@ -1,26 +1,39 @@
 {
-  "name": "javascript-stub",
-  "version": "0.0.0",
-  "main": "index.js",
+  "name": "cards-blackjack",
+  "version": "3.0.0",
+  "main": "dist/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node index.js",
-    "test": "scripts/test-with-coverage.sh"
+    "prestart": "npm run build",
+    "start": "node dist/index.js",
+    "pretest": "npm run build",
+    "test": "npm-run-all -p -c 'unittest' 'lint'",
+    "unittest": "scripts/test-with-coverage.sh",
+    "lint": "tslint --project ./ --exclude \"node_modules/*/**.ts\"",
+    "build": "rm -rf dist && tsc",
+    "prepare": "npm run build"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
+    "@types/bluebird": "^3.5.24",
+    "@types/chai": "^4.1.4",
     "@types/chai-as-promised": "^7.1.0",
-    "@types/mocha": "^5.2.6",
-    "@types/node": "11.13.4",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^9.4.6",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "mocha": "^5.2.0",
     "mocha-jenkins-reporter": "^0.4.0",
     "npm-run-all": "^4.1.5",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "source-map-support": "^0.5.9",
-    "typescript": "^3.4.3",
-    "verify-it": "2.3.1"
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-standard": "^8.0.1",
+    "tslint-immutable": "^4.7.0",
+    "typescript": "3.0.3",
+    "verify-it": "1.2.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bluebird": "^3.5.2"
+  }
 }

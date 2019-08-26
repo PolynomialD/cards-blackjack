@@ -1,7 +1,7 @@
-require('mocha')
-require('verify-it')
-const chaiConfig = require('chai')
-const chaiAsPromised = require('chai-as-promised')
+import 'mocha'
+import 'verify-it'
+import * as chai from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-chaiConfig.use(chaiAsPromised)
-chaiConfig.should()
+chai.use(chaiAsPromised)
+chai.should()

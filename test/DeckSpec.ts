@@ -1,8 +1,10 @@
-const NewDeck = require('../src/Deck.ts')
+import { Deck } from '../src/Deck'
 
 describe('Deck', () => {
-  it('should have a name', () => {
-    const newdeck = new NewDeck('test')
-    newdeck.name.should.eql('test')
+  describe('cards', () => {
+    verify.it('should contain 52 cards', () => {
+      const deck = new Deck()
+      deck.cards.length.should.eql(52)
+    })
   })
 })
