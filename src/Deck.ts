@@ -1,15 +1,19 @@
 import { card } from './lib/deckBuilder'
+import { game } from './types/game'
 
 export class Deck {
   constructor (
-    private readonly cards: card[]
+    public readonly deck: card[]
   ) {}
 
   getNumberOfCards (): number {
-    return this.cards.length
+    return this.deck.length
   }
 
-  dealCard () {
-    return this.cards[0]
+  dealCard (game: game, seatNumber: number): game {
+    const card: card = game.deck[0]
+    game.seats[seatNumber].hands[0].cards.push(card)
+    game.deck.pop()
+    return game
   }
 }
