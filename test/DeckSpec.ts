@@ -1,15 +1,13 @@
 import { Deck } from '../src/Deck'
-import { buildDeck } from '../src/lib/deckBuilder'
 import { TestGame } from './lib/TestGameBuilder'
 import { game, card } from '../src/types/game'
 
 describe('Deck', () => {
-  describe('cards', () => {
-    verify.it('should contain 52 cards', () => {
-      const cards = buildDeck()
-      const deck = new Deck(cards)
+  describe('getNumberOfCards', () => {
+    verify.it('should get the number of cards in the deck', () => {
+      const game: game = TestGame.create().build()
 
-      deck.getNumberOfCards().should.eql(52)
+      Deck.getNumberOfCards(game).should.eql(52)
     })
   })
 
@@ -20,6 +18,13 @@ describe('Deck', () => {
       const expected: card = initial.deck[0]
 
       complete.seats[0].hands[0].cards[0].should.eql(expected)
+    })
+
+    verify.it('should remove a card from the deck', () => {
+      const initial: game = TestGame.create().build()
+      const complete: game = Deck.dealCard(initial, 0)
+
+      Deck.getNumberOfCards(complete).should.eql(51)
     })
   })
 })

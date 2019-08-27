@@ -2,12 +2,9 @@ import { card } from './lib/deckBuilder'
 import { game } from './types/game'
 
 export class Deck {
-  constructor (
-    public readonly deck: card[]
-  ) {}
 
-  getNumberOfCards (): number {
-    return this.deck.length
+  static getNumberOfCards (game: game): number {
+    return game.deck.length
   }
 
   static dealCard (game: game, seatNumber: number): game {
