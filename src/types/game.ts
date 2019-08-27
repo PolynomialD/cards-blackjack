@@ -12,7 +12,7 @@ export type card = {
 export type player = {
   readonly id: number,
   readonly name: string,
-  readonly chips: number,
+  readonly chips: number
 }
 
 export type bet = {

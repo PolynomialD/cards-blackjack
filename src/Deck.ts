@@ -10,7 +10,7 @@ export class Deck {
     return this.deck.length
   }
 
-  dealCard (game: game, seatNumber: number): game {
+  static dealCard (game: game, seatNumber: number): game {
     const card: card = game.deck[0]
     game.seats[seatNumber].hands[0].cards.push(card)
     game.deck.pop()

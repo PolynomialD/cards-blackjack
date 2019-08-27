@@ -1,11 +1,11 @@
-import { seat, card, game, player } from '../types/game'
-import { buildDeck } from '../lib/deckBuilder'
+import { seat, card, game, player } from '../../src/types/game'
+import { buildDeck } from '../../src/lib/deckBuilder'
 
 export class TestGame {
   private constructor (
     private readonly deck: card[] = buildDeck(),
-    private readonly seats: seat[] = [],
-    private readonly player: player = { id:777, name:'Testy', chips: 1000 }
+    private readonly seats: seat[] = [{ bets: [{ playerId: 777, amount: 0 }], hands: [{ cards: [] }] }],
+    private readonly player: player = { id: 777, name: 'Testy', chips: 1000 }
   ) {}
 
   static create (): TestGame {
