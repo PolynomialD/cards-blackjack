@@ -1,0 +1,57 @@
+{
+  "deck": [],
+  "dealerCards": [{
+    "face": "10 of diamonds",
+    "value": 10
+  },{
+    "face": "ace of clubs",
+    "value": 11
+  }],
+  "seats": [{
+    "betAmount": 100,
+    "hands": [{
+      "canSplit": false,
+      "canDouble": true,
+      "canForfeit": false,
+      "isBust": false,
+      "isFinished": false,
+      "bet": 100,
+      "cards": [{
+        "face": "10 of clubs",
+        "value": 10
+      }]
+    },{
+      "canSplit": false,
+      "canDouble": true,
+      "canForfeit": false,
+      "isBust": false,
+      "isFinished": false,
+      "bet": 100,
+      "cards": [{
+        "face": "10 of hearts",
+        "value": 10
+      }]
+    }]
+  },{
+    "betAmount": 100,
+    "hands": [{
+      "canSplit": false,
+      "canDouble": true,
+      "canForfeit": false,
+      "isBust": false,
+      "isFinished": false,
+      "bet": 100,
+      "cards": [{
+        "face": "10 of clubs",
+        "value": 10
+      },{
+        "face": "ace of hearts",
+        "value": 11
+      }]
+    }]
+  }],
+  "player": {
+    "name": "Bob",
+    "chips": 1000
+  }
+}

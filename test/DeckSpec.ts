@@ -1,30 +1,37 @@
 import { Deck } from '../src/Deck'
 import { TestGame } from './lib/TestGameBuilder'
 import { game, card } from '../src/types/game'
+import { buildShoe } from '../src/lib/shoeBuilder'
+import { Gen } from 'verify-it'
 
 describe('Deck', () => {
-  describe('getNumberOfCards', () => {
-    verify.it('should get the number of cards in the deck', () => {
-      const game: game = TestGame.create().build()
+  verify.it('should have the correct number of cards in deck', Gen.integerBetween(1, 9), (numberOfDecks) => {
+    const shoe = buildShoe(numberOfDecks)
+    const expected = 52 * numberOfDecks
+    const game: game = TestGame.create()
+      .withDeck(shoe)
+      .build()
 
-      Deck.getNumberOfCards(game).should.eql(52)
-    })
+    game.shoe.length.should.eql(expected)
   })
 
   describe('dealCard()', () => {
     verify.it('should deal a card to a hand', () => {
-      const initial: game = TestGame.create().build()
-      const complete: game = Deck.dealCard(initial, 0)
-      const expected: card = initial.deck[0]
-
-      complete.seats[0].hands[0].cards[0].should.eql(expected)
+      const gameState: game = TestGame.create()
+        .withSeats([{ betAmount: 0, hands: [{ id: 1233, bet: 0, cards: [] }, { id: 1234, bet: 0, cards: [] }] }])
+        .build()
+      const expectedCard: card = gameState.shoe[0]
+      const newGameState = Deck.getCard(gameState, 1234)
+      newGameState.seats[0].hands[1].cards[0].should.eql(expectedCard)
     })
 
     verify.it('should remove a card from the deck', () => {
-      const initial: game = TestGame.create().build()
-      const complete: game = Deck.dealCard(initial, 0)
+      const gameState: game = TestGame.create()
+        .withSeats([{ betAmount: 0, hands: [{ id: 1, bet: 0, cards: [] }] }])
+        .build()
+      const expected = gameState.shoe.length - 1
 
-      Deck.getNumberOfCards(complete).should.eql(51)
+      Deck.getCard(gameState, 1).shoe.length.should.eql(expected)
     })
   })
 })

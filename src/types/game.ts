@@ -1,5 +1,6 @@
 export type game = {
-  readonly deck: card[],
+  readonly shoe: card[],
+  readonly dealerCards: card[],
   readonly seats: seat[],
   readonly player: player
 }
@@ -9,22 +10,18 @@ export type card = {
   readonly value: number
 }
 
-export type player = {
-  readonly id: number,
-  readonly name: string,
-  readonly chips: number
-}
-
-export type bet = {
-  readonly playerId: number,
-  readonly amount: number
-}
-
 export type seat = {
-  readonly bets: bet[],
+  readonly betAmount: number,
   readonly hands: hand[]
 }
 
 export type hand = {
-  readonly cards: card[]
+  readonly id: number,
+  readonly cards: card[],
+  readonly bet: number
+}
+
+export type player = {
+  readonly name: string,
+  readonly chips: number
 }
