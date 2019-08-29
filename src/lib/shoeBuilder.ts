@@ -22,12 +22,12 @@ function buildDeck (suits: suit[], values: value[]): card[] {
 
 function shuffleDeck (deck: card[]): card[] {
   const copy: card[] = deck.slice()
-  for (let iterationIndex: number = copy.length - 1; iterationIndex > 0; iterationIndex--) {
-    const randomIndex: number = Math.floor(Math.random() * (iterationIndex + 1))
-    const card = copy[iterationIndex]
-    copy[iterationIndex] = copy[randomIndex]
+  copy.forEach((_, index) => {
+    const randomIndex: number = Math.floor(Math.random() * (index + 1))
+    const card = copy[index]
+    copy[index] = copy[randomIndex]
     copy[randomIndex] = card
-  }
+  })
   return copy
 }
 
