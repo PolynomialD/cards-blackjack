@@ -50,8 +50,6 @@ export class Deck {
   }
 
   private static giveDealerCard (dealerCards: card[], card: card): card[] {
-    const cards = dealerCards.slice()
-    cards.push(card)
-    return cards
+    return [...dealerCards, card]
   }
 }
