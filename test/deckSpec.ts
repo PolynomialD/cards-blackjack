@@ -1,6 +1,6 @@
 import { Deck } from '../src/deck'
 import { TestGame } from './lib/testGameBuilder'
-import { game, card } from '../src/types/game'
+import { game, card } from '../src/types/gametypes'
 import { buildShoe } from '../src/lib/shoeBuilder'
 import { Gen } from 'verify-it'
 

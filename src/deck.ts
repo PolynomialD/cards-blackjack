@@ -1,4 +1,4 @@
-import { game, seat, card } from './types/game'
+import { game, seat, card } from './types/gametypes'
 
 export class Deck {
   static getCard (game: game, handId: number): game {

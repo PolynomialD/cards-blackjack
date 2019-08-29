@@ -1,4 +1,4 @@
-import { card } from '../types/game'
+import { card } from '../types/gametypes'
 
 export function buildShoe (numberOfDecks: number): card[] {
   const suits: suit[] = ['clubs', 'diamonds', 'hearts', 'spades']
@@ -21,14 +21,14 @@ function buildDeck (suits: suit[], values: value[]): card[] {
 }
 
 function shuffleDeck (deck: card[]): card[] {
-  const copy: card[] = deck.slice()
-  copy.forEach((_, index) => {
+  const newDeck: card[] = deck.slice()
+  newDeck.forEach((card, index) => {
     const randomIndex: number = Math.floor(Math.random() * (index + 1))
-    const card = copy[index]
-    copy[index] = copy[randomIndex]
-    copy[randomIndex] = card
+    const cardToSwap = card
+    card = newDeck[randomIndex]
+    newDeck[randomIndex] = cardToSwap
   })
-  return copy
+  return newDeck
 }
 
 export type suit = 'clubs' | 'diamonds' | 'hearts' | 'spades'

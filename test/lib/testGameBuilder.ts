@@ -1,4 +1,4 @@
-import { seat, card, game, player } from '../../src/types/game'
+import { seat, card, game, player } from '../../src/types/gametypes'
 import { buildShoe } from '../../src/lib/shoeBuilder'
 import { Gen } from 'verify-it'
 
