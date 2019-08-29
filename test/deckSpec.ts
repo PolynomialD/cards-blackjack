@@ -1,5 +1,5 @@
-import { Deck } from '../src/Deck'
-import { TestGame } from './lib/TestGameBuilder'
+import { Deck } from '../src/deck'
+import { TestGame } from './lib/testGameBuilder'
 import { game, card } from '../src/types/game'
 import { buildShoe } from '../src/lib/shoeBuilder'
 import { Gen } from 'verify-it'
