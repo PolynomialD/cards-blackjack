@@ -1,7 +1,7 @@
 import { game, seat, card } from './types/gametypes'
 
 export class Deck {
-  static getCard (game: game, handId: number): game {
+  static dealCardToHand (game: game, handId: number): game {
     const card: card = game.shoe[0]
     if (!card) {
       throw new Error('no cards in deck')
@@ -32,5 +32,26 @@ export class Deck {
         })
       }
     })
+  }
+
+  static dealCardToDealer (game: game): game {
+    const card: card = game.shoe[0]
+    if (!card) {
+      throw new Error('no cards in deck')
+    }
+    const shoe = game.shoe.slice(1)
+
+    return {
+      shoe,
+      dealerCards: this.giveDealerCard(game.dealerCards, card),
+      seats: game.seats,
+      player: game.player
+    }
+  }
+
+  private static giveDealerCard (dealerCards: card[], card: card): card[] {
+    const cards = dealerCards.slice()
+    cards.push(card)
+    return cards
   }
 }

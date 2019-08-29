@@ -21,7 +21,7 @@ describe('Deck', () => {
         .withSeats([{ betAmount: 0, hands: [{ id: 1233, bet: 0, cards: [] }, { id: 1234, bet: 0, cards: [] }] }])
         .build()
       const expectedCard: card = gameState.shoe[0]
-      const newGameState = Deck.getCard(gameState, 1234)
+      const newGameState = Deck.dealCardToHand(gameState, 1234)
       newGameState.seats[0].hands[1].cards[0].should.eql(expectedCard)
     })
 
@@ -31,7 +31,7 @@ describe('Deck', () => {
         .build()
       const expected = gameState.shoe.length - 1
 
-      Deck.getCard(gameState, 1).shoe.length.should.eql(expected)
+      Deck.dealCardToHand(gameState, 1).shoe.length.should.eql(expected)
     })
   })
 })

@@ -9,14 +9,14 @@ export function buildShoe (numberOfDecks: number): card[] {
 }
 
 function buildDeck (suits: suit[], values: value[]): card[] {
-  return suits.reduce((output: card[], suit) => {
-    const bob = values.map((value) => {
+  return suits.reduce((deck: card[], suit) => {
+    const cards = values.map((value) => {
       return {
         face: `${value[0]} of ${suit}`,
         value: value[1]
       }
     })
-    return [...output, ...bob]
+    return [...deck, ...cards]
   }, [])
 }
 
