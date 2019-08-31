@@ -4,10 +4,10 @@ import { Gen } from 'verify-it'
 
 export class TestGame {
   private constructor (
-    private readonly shoe: card[] = buildShoe(2),
-    private readonly dealerCards: card[] = [],
-    private readonly seats: seat[] = [],
-    private readonly player: player = { name: Gen.word(), chips: Gen.integerBetween(1000, 10000)() }
+    readonly shoe: card[] = buildShoe(2),
+    readonly dealerCards: card[] = [],
+    readonly seats: seat[] = [],
+    readonly player: player = { name: Gen.word(), chips: Gen.integerBetween(1000, 10000)() }
   ) {}
 
   static create (): TestGame {
