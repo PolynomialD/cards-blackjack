@@ -22,6 +22,7 @@ describe('Deck', () => {
         .build()
       const expectedCard: card = gameState.shoe[0]
       const newGameState = Deck.dealCardToHand(gameState, 1234)
+
       newGameState.seats[0].hands[1].cards[0].should.eql(expectedCard)
     })
 
