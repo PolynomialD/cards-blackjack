@@ -52,4 +52,28 @@ export class Deck {
   private static giveDealerCard (dealerCards: card[], card: card): card[] {
     return [...dealerCards, card]
   }
+
+  static dealCards (game: game): game {
+    const shoe = game.shoe.slice(game.seats.length * 2)
+    const seats = game.seats.map((seat, index) => {
+      const cardOne = game.shoe[index]
+      const cardTwo = game.shoe[game.seats.length + index]
+      return {
+        betAmount: seat.betAmount,
+        hands: seat.hands.map((hand) => {
+          return {
+            id: hand.id,
+            bet: hand.bet,
+            cards: [cardOne, cardTwo]
+          }
+        })
+      }
+    })
+    return {
+      shoe,
+      dealerCards: game.dealerCards,
+      seats: seats,
+      player: game.player
+    }
+  }
 }
