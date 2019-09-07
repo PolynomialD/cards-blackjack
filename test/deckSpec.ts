@@ -15,7 +15,7 @@ describe('Deck', () => {
     game.shoe.length.should.eql(expected)
   })
 
-  describe('dealCard()', () => {
+  describe('dealCardToHand()', () => {
     verify.it('should deal a card to a hand', () => {
       const gameState: game = TestGame.create()
         .withSeats([{ betAmount: 0, hands: [{ id: 1233, bet: 0, cards: [] }, { id: 1234, bet: 0, cards: [] }] }])
@@ -33,6 +33,18 @@ describe('Deck', () => {
       const expected = gameState.shoe.length - 1
 
       Deck.dealCardToHand(gameState, 1).shoe.length.should.eql(expected)
+    })
+  })
+
+  describe('dealCards()', () => {
+    verify.it('should deal 2 cards to each hand', () => {
+      const gameState: game = TestGame.create()
+        .withSeats([{ betAmount: 0, hands: [{ id: 1, bet: 0, cards: [] } ] }, { betAmount: 0, hands: [{ id: 2, bet: 0, cards: [] } ] }])
+        .build()
+      const newGameState = Deck.dealCards(gameState)
+
+      newGameState.seats[0].hands[0].cards.length.should.eql(2)
+      newGameState.seats[1].hands[0].cards.length.should.eql(2)
     })
   })
 })
