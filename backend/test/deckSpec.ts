@@ -18,7 +18,7 @@ describe('Deck', () => {
   describe('dealCardToHand()', () => {
     verify.it('should deal a card to a hand', () => {
       const gameState: game = TestGame.create()
-        .withSeats([{ betAmount: 0, hands: [{ id: 1233, bet: 0, cards: [] }, { id: 1234, bet: 0, cards: [] }] }])
+        .withSeats([{ betAmount: 0, hands: [{ id: 1233, bust: false, bet: 0, cards: [] }, { id: 1234, bust: false, bet: 0, cards: [] }] }])
         .build()
       const expectedCard: card = gameState.shoe[0]
       const newGameState = Deck.dealCardToHand(gameState, 1234)
@@ -28,7 +28,7 @@ describe('Deck', () => {
 
     verify.it('should remove a card from the deck', () => {
       const gameState: game = TestGame.create()
-        .withSeats([{ betAmount: 0, hands: [{ id: 1, bet: 0, cards: [] }] }])
+        .withSeats([{ betAmount: 0, hands: [{ id: 1, bust: false, bet: 0, cards: [] }] }])
         .build()
       const expected = gameState.shoe.length - 1
 

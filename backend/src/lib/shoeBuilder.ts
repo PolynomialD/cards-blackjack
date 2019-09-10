@@ -1,4 +1,4 @@
-import { card } from '../types/gametypes'
+import { card, suit, value } from '../types/gametypes'
 
 export function buildShoe (numberOfDecks: number): card[] {
   const suits: suit[] = ['clubs', 'diamonds', 'hearts', 'spades']
@@ -30,7 +30,3 @@ export function shuffleDeck (deck: card[]): card[] {
   })
   return newDeck
 }
-
-export type suit = 'clubs' | 'diamonds' | 'hearts' | 'spades'
-
-export type value = [string, number]

@@ -26,3 +26,7 @@ export type player = {
   readonly name: string,
   readonly chips: number
 }
+
+export type suit = 'clubs' | 'diamonds' | 'hearts' | 'spades'
+
+export type value = [string, number]
