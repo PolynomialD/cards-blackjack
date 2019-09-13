@@ -60,7 +60,6 @@ export class Deck {
     })
   }
 
-
   private static giveDealerCard (dealerCards: card[], card: card): card[] {
     return [...dealerCards, card]
   }
@@ -69,6 +68,7 @@ export class Deck {
     return {
       id: 11,
       bet: 100,
+      bust: false,
       cards
     }
   }
