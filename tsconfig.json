@@ -3,7 +3,7 @@
     "target": "ES2016",
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "../dist",
+    "outDir": "./dist",
     "noEmitOnError": true,
     "pretty": true,
     "strict": true,
