@@ -9,20 +9,4 @@ describe('shuffle()', () => {
     const shuffled: card[] = shuffleDeck(original)
     shuffled.should.not.eql(original)
   })
-
-  // it('should not alter the length of the deck', () => {
-  //   const deck = new Deck()
-  //   const original = deck.size()
-  //   deck.shuffle()
-  //   deck.size().should.eql(original)
-  // })
-
-  // it('should contain valid cards after shuffling', () => {
-  //   const validSuits = ['♣', '♦', '♥', '♠']
-  //   const deck = new Deck()
-  //   deck.shuffle()
-  //   deck.cards.forEach((card) => {
-  //     validSuits.includes(card.suit).should.eql(true)
-  //   })
-  // })
 })

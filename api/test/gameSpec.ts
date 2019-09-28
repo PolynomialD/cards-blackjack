@@ -1,103 +1,196 @@
 import { Game } from '../src/game'
-// import { TestGame } from './lib/testGameBuilder'
-// import { game, card } from '../src/types/gametypes'
-// import { buildShoe } from '../src/lib/shoeBuilder'
-// import { Gen } from 'verify-it'
+import { TestGame } from './lib/testGameBuilder'
+import { game, card, seat } from '../src/types/gametypes'
+import { buildShoe } from '../src/lib/shoeBuilder'
+import { Gen } from 'verify-it'
+import { MongoClient } from 'mongodb'
 
-describe.only('Deck', () => {
-  verify.it('', async () => {
-    await Game.dealSeats()
+const url = `mongodb://root:example@localhost:27017`
 
-    // console.log('newGame', JSON.stringify(game, null, 2))
-    return true
+const insert = async (data: any) => {
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  const collection = 'gamedata'
+  try {
+    await client.connect()
+    const db = client.db('blackjack')
+    await db.collection(collection).insertOne(data)
+  } catch (err) {
+    console.log(err.stack)
+  } finally {
+    await client.close()
+  }
+}
+
+const get = async (id: any) => {
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  const collection = 'gamedata'
+  try {
+    await client.connect()
+    const db = client.db('blackjack')
+    const game = await db.collection(collection).findOne({ id })
+    return game
+  } catch (err) {
+    console.log(err.stack)
+  } finally {
+    await client.close()
+  }
+}
+
+describe('Deck', () => {
+  verify.it('should have the correct number of cards in deck', Gen.integerBetween(1, 9), (numberOfDecks) => {
+    const shoe = buildShoe(numberOfDecks)
+    const expected = 52 * numberOfDecks
+    const game: game = TestGame.create()
+      .withDeck(shoe)
+      .build()
+
+    game.shoe.length.should.eql(expected)
   })
 
-  // verify.it('should have the correct number of cards in deck', Gen.integerBetween(1, 9), (numberOfDecks) => {
-  //   const shoe = buildShoe(numberOfDecks)
-  //   const expected = 52 * numberOfDecks
-  //   const game: game = TestGame.create()
-  //     .withDeck(shoe)
-  //     .build()
+  describe('buySeat()', () => {
+    verify.it('should add a seat', Gen.string, async (gameId) => {
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .build()
 
-  //   game.shoe.length.should.eql(expected)
-  // })
+      await insert(gameState)
+      await Game.buySeat(gameId)
+      const newGameState = await get(gameId) as game
+      newGameState.seats.length.should.eql(1)
+    })
 
-  // describe('dealCardToHand()', () => {
-  //   verify.it('should deal a card to a hand', () => {
-  //     const gameState: game = TestGame.create()
-  //       .withSeats([{ betAmount: 0, hands: [{ id: 1233, bust: false, bet: 0, cards: [] }, { id: 1234, bust: false, bet: 0, cards: [] }] }])
-  //       .build()
-  //     const expectedCard: card = gameState.shoe[0]
-  //     const newGameState = Game.dealCardToHand(gameState, 1234)
+    verify.it('should have the correct bet amount', Gen.string, Gen.integerBetween(200,2000), async (gameId, bet) => {
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .build()
 
-  //     newGameState.seats[0].hands[1].cards[0].should.eql(expectedCard)
-  //   })
+      await insert(gameState)
+      await Game.buySeat(gameId, bet)
+      const newGameState = await get(gameId) as game
+      newGameState.seats[0].betAmount.should.eql(bet)
+    })
+  })
 
-  //   verify.it('should remove a card from the deck', () => {
-  //     const gameState: game = TestGame.create()
-  //       .withSeats([{ betAmount: 0, hands: [{ id: 1, bust: false, bet: 0, cards: [] }] }])
-  //       .build()
-  //     const expected = gameState.shoe.length - 1
+  describe('dealCardToHand()', () => {
+    verify.it('should deal a card to a hand', Gen.string, Gen.string, async (gameId, handId) => {
+      const hand = { ...Game.makeHand([]), id: handId }
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .withSeats([{ betAmount: 0, hands: [Game.makeHand([]), hand] }])
+        .build()
+      const expectedCard: card = gameState.shoe[0]
 
-  //     Game.dealCardToHand(gameState, 1).shoe.length.should.eql(expected)
-  //   })
-  // })
+      await insert(gameState)
+      await Game.dealCardToHand(gameId, handId)
+      const newGameState = await get(gameId) as game
 
-  // function generateSeats (amount: number): seat[] {
-  //   return new Array(amount).fill({
-  //     betAmount: 0,
-  //     hands: []
-  //   })
-  // }
+      newGameState.seats[0].hands[1].cards[0].should.eql(expectedCard)
+    })
 
-  // describe('dealCards()', () => {
-  //   verify.it('should deal a hand with 2 cards to each seat', () => {
-  //     const seats = generateSeats(2)
-  //     const gameState: game = TestGame.create()
-  //       .withSeats(seats)
-  //       .build()
-  //     const newGameState = Game.dealSeats(gameState)
+    verify.it('should remove a card from the deck', Gen.string, Gen.string, async (gameId, handId) => {
+      const hand = { ...Game.makeHand([]), id: handId }
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .withSeats([{ betAmount: 0, hands: [hand] }])
+        .build()
+      const expected = gameState.shoe.length - 1
 
-  //     newGameState.seats.forEach((seat) => {
-  //       seat.hands[0].cards.length.should.eql(2)
-  //     })
-  //   })
+      await insert(gameState)
+      await Game.dealCardToHand(gameId, handId)
+      const newGameState = await get(gameId) as game
+      newGameState.shoe.length.should.eql(expected)
+    })
+  })
 
-  //   verify.it('should leave all seats with 1 hand', () => {
-  //     const seats = generateSeats(2)
-  //     const gameState: game = TestGame.create()
-  //       .withSeats(seats)
-  //       .build()
-  //     const newGameState = Game.dealSeats(gameState)
+  function generateSeats (amount: number): seat[] {
+    return new Array(amount).fill({
+      id: Gen.string(),
+      betAmount: 0,
+      hands: []
+    })
+  }
 
-  //     newGameState.seats.forEach((seat) => {
-  //       seat.hands.length.should.eql(1)
-  //     })
-  //   })
+  describe('dealCards()', () => {
+    verify.it('should pass its betAmount to its hands', Gen.string, Gen.integerBetween(1000, 10000), async (gameId, bet) => {
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .build()
 
-  //   verify.it('should deal the correct number of cards', () => {
-  //     const gameState: game = TestGame.create()
-  //       .withSeats(generateSeats(1))
-  //       .build()
-  //     const newGameState = Game.dealSeats(gameState)
-  //     newGameState.shoe.length.should.eql(100)
-  //   })
+      await insert(gameState)
+      await Game.buySeat(gameId, bet)
+      await Game.dealSeats(gameId)
+      const newGameState = await get(gameId) as game
+      newGameState.seats[0].hands[0].bet.should.eql(bet)
+    })
 
-  //   verify.it('should give the dealer 2 cards', () => {
-  //     const gameState: game = TestGame.create().build()
-  //     const newGameState = Game.dealSeats(gameState)
+    verify.it('should deal a hand with 2 cards to each seat', Gen.string, async (gameId) => {
+      const seats = generateSeats(2)
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .withSeats(seats)
+        .build()
 
-  //     newGameState.dealerCards.length.should.eql(2)
-  //   })
-  // })
+      await insert(gameState)
+      await Game.dealSeats(gameId)
+      const newGameState = await get(gameId) as game
+      newGameState.seats.forEach((seat) => {
+        seat.hands[0].cards.length.should.eql(2)
+      })
+    })
 
-  // describe('dealCardToDealer', () => {
-  //   verify.it('should give the dealer another card', () => {
-  //     const gameState: game = TestGame.create().build()
-  //     const newGameState = Game.dealCardToDealer(Game.dealSeats(gameState))
+    verify.it('should leave all seats with 1 hand', Gen.string, async (gameId) => {
+      const seats = generateSeats(2)
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .withSeats(seats)
+        .build()
 
-  //     newGameState.dealerCards.length.should.eql(3)
-  //   })
-  // })
+      await insert(gameState)
+      await Game.dealSeats(gameId)
+
+      const newGameState = await get(gameId) as game
+
+      newGameState.seats.forEach((seat) => {
+        seat.hands.length.should.eql(1)
+      })
+    })
+
+    verify.it('should deal the correct number of cards', Gen.string, async (gameId) => {
+      const gameState: game = TestGame.create()
+        .withId(gameId)
+        .withSeats(generateSeats(1))
+        .build()
+
+      await insert(gameState)
+      await Game.dealSeats(gameId)
+
+      const newGameState = await get(gameId) as game
+      newGameState.shoe.length.should.eql(100)
+    })
+
+    verify.it('should give the dealer 2 cards', Gen.string, async (gameId) => {
+      const gameState: game = TestGame.create().withId(gameId).build()
+      await insert(gameState)
+      await Game.dealSeats(gameId)
+
+      const newGameState = await get(gameId) as game
+
+      newGameState.dealerCards.length.should.eql(2)
+    })
+  })
+
+  describe('dealCardToDealer', () => {
+    verify.it('should give the dealer another card', Gen.string, async (gameId) => {
+      const gameState: game = TestGame.create().withId(gameId).build()
+
+      await insert(gameState)
+      await Game.dealSeats(gameId)
+      await Game.dealCardToDealer(gameId)
+
+      const newGameState = await get(gameId) as game
+
+      newGameState.dealerCards.length.should.eql(3)
+    })
+  })
 
 })

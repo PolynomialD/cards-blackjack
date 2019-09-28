@@ -18,6 +18,12 @@ export type seat = {
 
 export type hand = {
   readonly id: string,
+  readonly active: boolean,
+  readonly canSplit: boolean,
+  readonly canDouble: boolean,
+  readonly canForfeit: boolean,
+  readonly isBust: boolean,
+  readonly isFinished: boolean,
   readonly bust: boolean,
   readonly cards: card[],
   readonly bet: number

@@ -1,18 +1,16 @@
 import { MongoClient } from 'mongodb'
+import { game } from '../types/gametypes'
 
 const dbName = 'blackjack'
 const url = `mongodb://root:example@localhost:27017`
 
 export async function insert (collection: string, data: any) {
-  const client = new MongoClient(url)
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
   try {
     await client.connect()
-    console.log('Connected correctly to server')
-
     const db = client.db(dbName)
-    const one = await db.collection(collection).insertOne(data)
-    console.log(one.insertedCount)
+    await db.collection(collection).insertOne(data)
   } catch (err) {
     console.log(err.stack)
   } finally {
@@ -22,16 +20,13 @@ export async function insert (collection: string, data: any) {
 // insert('gamedata', exampleGame)
 
 export async function update (collection: string, matcher: any, data: any, upsert = false) {
-  const client = new MongoClient(url)
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
   try {
     await client.connect()
-    console.log('Connected correctly to server')
-
     const db = client.db(dbName)
     const col = db.collection(collection)
-    const response = await col.updateMany(matcher, { $set: data }, { upsert })
-    console.log(response.upsertedCount)
+    await col.updateMany(matcher, { $set: data }, { upsert })
   } catch (err) {
     console.log(err.stack)
   } finally {
@@ -41,15 +36,30 @@ export async function update (collection: string, matcher: any, data: any, upser
 // update('updates', {someThing: 333}, {someThing: 777})
 
 export async function get (collection: string, matcher: any): Promise<any> {
-  const client = new MongoClient(url)
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
   try {
     await client.connect()
-    console.log('Connected correctly to server')
-
     const db = client.db(dbName)
     const col = db.collection(collection)
     const response = await col.find(matcher).toArray()
+
+    return response
+  } catch (err) {
+    console.log(err.stack)
+  } finally {
+    await client.close()
+  }
+}
+
+export async function getGame (gameId: string): Promise<any> {
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true })
+
+  try {
+    await client.connect()
+    const db = client.db(dbName)
+    const col = db.collection('gamedata')
+    const response = await col.findOne({ id: gameId }) as game
 
     return response
   } catch (err) {
