@@ -21,7 +21,7 @@ export class Game {
     await mongoRepository.insert('gamedata', data)
   }
 
-  static async buySeat (gameId: string, betAmount: number = 100) {
+  static async placeBet (gameId: string, betAmount: number = 100) {
     const game = await mongoRepository.getGame(gameId) as game
     const newSeat = {
       id: uuidv1(),
@@ -32,7 +32,7 @@ export class Game {
     await mongoRepository.update('gamedata', { id: gameId }, { seats })
   }
 
-  static async dealSeats (gameId: string) {
+  static async dealCards (gameId: string) {
     const game = await mongoRepository.getGame(gameId) as game
     const playerHands = this.dealHands(game.seats, game.shoe)
     const dealerCards = playerHands.shoe.splice(0, 2)
@@ -69,11 +69,28 @@ export class Game {
     await mongoRepository.update('gamedata', { id: gameId }, data)
   }
 
-  static makeHand (cards: card[], bet: number = 100): hand {
+  static async evaluateHand (gameId: string, handId: string) {
+    const game = await mongoRepository.getGame(gameId) as game
+
+    const newSeats = game.seats.map((seat: seat) => {
+      seat.hands.map((hand) => {
+        if (hand.id === handId) {
+          return this.makeHand(hand.cards, hand.bet, this.isSplittable(hand))
+        } else return hand
+      })
+    })
+    await mongoRepository.update('gamedata', { id: gameId }, newSeats)
+  }
+
+  static isSplittable (hand: hand) {
+    return hand.cards.length === 2 && hand.cards[0].value === hand.cards[1].value
+  }
+
+  static makeHand (cards: card[], bet: number = 100, splittable: boolean = false): hand {
     return {
       id: uuidv1(),
       active: false,
-      canSplit: false,
+      splittable,
       canDouble: true,
       canForfeit: false,
       isBust: false,

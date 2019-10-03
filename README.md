@@ -1,1 +1,0 @@
-BlackJack version 3

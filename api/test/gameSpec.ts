@@ -47,14 +47,14 @@ describe('Deck', () => {
     game.shoe.length.should.eql(expected)
   })
 
-  describe('buySeat()', () => {
+  describe('placeBet()', () => {
     verify.it('should add a seat', Gen.string, async (gameId) => {
       const gameState: game = TestGame.create()
         .withId(gameId)
         .build()
 
       await insert(gameState)
-      await Game.buySeat(gameId)
+      await Game.placeBet(gameId)
       const newGameState = await get(gameId) as game
       newGameState.seats.length.should.eql(1)
     })
@@ -65,7 +65,7 @@ describe('Deck', () => {
         .build()
 
       await insert(gameState)
-      await Game.buySeat(gameId, bet)
+      await Game.placeBet(gameId, bet)
       const newGameState = await get(gameId) as game
       newGameState.seats[0].betAmount.should.eql(bet)
     })
@@ -117,8 +117,8 @@ describe('Deck', () => {
         .build()
 
       await insert(gameState)
-      await Game.buySeat(gameId, bet)
-      await Game.dealSeats(gameId)
+      await Game.placeBet(gameId, bet)
+      await Game.dealCards(gameId)
       const newGameState = await get(gameId) as game
       newGameState.seats[0].hands[0].bet.should.eql(bet)
     })
@@ -131,7 +131,7 @@ describe('Deck', () => {
         .build()
 
       await insert(gameState)
-      await Game.dealSeats(gameId)
+      await Game.dealCards(gameId)
       const newGameState = await get(gameId) as game
       newGameState.seats.forEach((seat) => {
         seat.hands[0].cards.length.should.eql(2)
@@ -146,7 +146,7 @@ describe('Deck', () => {
         .build()
 
       await insert(gameState)
-      await Game.dealSeats(gameId)
+      await Game.dealCards(gameId)
 
       const newGameState = await get(gameId) as game
 
@@ -162,7 +162,7 @@ describe('Deck', () => {
         .build()
 
       await insert(gameState)
-      await Game.dealSeats(gameId)
+      await Game.dealCards(gameId)
 
       const newGameState = await get(gameId) as game
       newGameState.shoe.length.should.eql(100)
@@ -171,7 +171,7 @@ describe('Deck', () => {
     verify.it('should give the dealer 2 cards', Gen.string, async (gameId) => {
       const gameState: game = TestGame.create().withId(gameId).build()
       await insert(gameState)
-      await Game.dealSeats(gameId)
+      await Game.dealCards(gameId)
 
       const newGameState = await get(gameId) as game
 
@@ -184,7 +184,7 @@ describe('Deck', () => {
       const gameState: game = TestGame.create().withId(gameId).build()
 
       await insert(gameState)
-      await Game.dealSeats(gameId)
+      await Game.dealCards(gameId)
       await Game.dealCardToDealer(gameId)
 
       const newGameState = await get(gameId) as game

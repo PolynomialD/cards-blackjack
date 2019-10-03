@@ -19,7 +19,7 @@ export type seat = {
 export type hand = {
   readonly id: string,
   readonly active: boolean,
-  readonly canSplit: boolean,
+  readonly splittable: boolean,
   readonly canDouble: boolean,
   readonly canForfeit: boolean,
   readonly isBust: boolean,
