@@ -79,10 +79,10 @@ export class Game {
         } else return hand
       })
     })
-    await mongoRepository.update('gamedata', { id: gameId }, newSeats)
+    await mongoRepository.update('gamedata', { id: gameId }, { seats: newSeats })
   }
 
-  static isSplittable (hand: hand) {
+  static isSplittable (hand: hand): boolean {
     return hand.cards.length === 2 && hand.cards[0].value === hand.cards[1].value
   }
 
