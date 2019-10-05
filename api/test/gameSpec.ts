@@ -193,37 +193,16 @@ describe('Deck', () => {
     })
   })
 
-  describe('evaluateHand', () => {
-    verify.it('should check if a hand is splittable', Gen.integerBetween(1, 11), Gen.string, Gen.string, async (value, gameId, handId) => {
-      const gameState: game = TestGame.create().withId(gameId).withSeats([{
-        betAmount: 100,
-        hands: [{
-          id: handId,
-          bet: 100,
-          active: false,
-          splittable: false,
-          canDouble: false,
-          canForfeit: false,
-          isBust: false,
-          isFinished: false,
-          bust: false,
-          cards: [{
-            face: 'test',
-            value
-          },
-          {
-            face: 'test',
-            value
-          }]
-    }]}]).build()
-
-    await insert(gameState)
-    await Game.evaluateHand(gameId, handId)
-
-    const newGameState = await get(gameId) as game
-
-    newGameState.seats[0].hands[0].splittable.should.eql(true)
-
+  describe('makeHand', () => {
+    verify.it('should mark a hand as splittable, if cards are equal value', Gen.integerBetween(1, 11), async (value) => {
+      const cards: card[] = [{
+        face: 'test',
+        value
+      }, {
+        face: 'test',
+        value
+      }]
+      Game.makeHand(cards).splittable.should.eql(true)
     })
   })
 

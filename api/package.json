@@ -20,6 +20,7 @@
     "@types/mocha": "^5.2.5",
     "@types/mongodb": "^3.3.3",
     "@types/node": "^9.4.6",
+    "@types/restify": "^8.4.0",
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "mocha": "^5.2.0",
@@ -37,6 +38,8 @@
   "dependencies": {
     "bluebird": "^3.5.2",
     "mongodb": "^3.3.2",
+    "restify": "^8.4.0",
+    "restify-cors-middleware": "^1.1.1",
     "saslprep": "^1.0.3",
     "uuid": "^3.3.3"
   }

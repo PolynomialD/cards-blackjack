@@ -19,6 +19,7 @@ export class Game {
     }
 
     await mongoRepository.insert('gamedata', data)
+    return data
   }
 
   static async placeBet (gameId: string, betAmount: number = 100) {
@@ -30,6 +31,8 @@ export class Game {
     }
     const seats = [...game.seats, newSeat]
     await mongoRepository.update('gamedata', { id: gameId }, { seats })
+    const savedGame = await mongoRepository.getGame(gameId)
+    return savedGame
   }
 
   static async dealCards (gameId: string) {
@@ -41,6 +44,8 @@ export class Game {
       seats: playerHands.seats,
       shoe: playerHands.shoe
     })
+    const savedGame = await mongoRepository.getGame(gameId)
+    return savedGame
   }
 
   // to-do
@@ -69,28 +74,15 @@ export class Game {
     await mongoRepository.update('gamedata', { id: gameId }, data)
   }
 
-  static async evaluateHand (gameId: string, handId: string) {
-    const game = await mongoRepository.getGame(gameId) as game
-
-    const newSeats = game.seats.map((seat: seat) => {
-      seat.hands.map((hand) => {
-        if (hand.id === handId) {
-          return this.makeHand(hand.cards, hand.bet, this.isSplittable(hand))
-        } else return hand
-      })
-    })
-    await mongoRepository.update('gamedata', { id: gameId }, { seats: newSeats })
+  private static isSplittable (cards: card[]): boolean {
+    return cards.length === 2 && cards[0].value === cards[1].value
   }
 
-  static isSplittable (hand: hand): boolean {
-    return hand.cards.length === 2 && hand.cards[0].value === hand.cards[1].value
-  }
-
-  static makeHand (cards: card[], bet: number = 100, splittable: boolean = false): hand {
+  static makeHand (cards: card[], bet: number = 100): hand {
     return {
       id: uuidv1(),
       active: false,
-      splittable,
+      splittable: this.isSplittable(cards),
       canDouble: true,
       canForfeit: false,
       isBust: false,
@@ -109,6 +101,7 @@ export class Game {
           if (hand.id === handId) {
             return {
               ...hand,
+              canDouble: false,
               cards: [...hand.cards, card]
             }
           }
