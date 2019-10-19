@@ -13,6 +13,7 @@ export async function insert (collection: string, data: any) {
     await db.collection(collection).insertOne(data)
   } catch (err) {
     console.log(err.stack)
+    throw new Error('DbInsertError')
   } finally {
     await client.close()
   }
@@ -29,6 +30,7 @@ export async function update (collection: string, matcher: any, data: any, upser
     await col.updateMany(matcher, { $set: data }, { upsert })
   } catch (err) {
     console.log(err.stack)
+    throw new Error('DbUpdateError')
   } finally {
     await client.close()
   }
@@ -47,6 +49,7 @@ export async function get (collection: string, matcher: any): Promise<any> {
     return response
   } catch (err) {
     console.log(err.stack)
+    throw new Error('DbGetError')
   } finally {
     await client.close()
   }
@@ -63,7 +66,9 @@ export async function getGame (gameId: string): Promise<any> {
 
     return response
   } catch (err) {
+    console.log('DbGetGameError')
     console.log(err.stack)
+    throw new Error('DbGetGameError')
   } finally {
     await client.close()
   }

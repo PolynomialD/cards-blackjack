@@ -12,11 +12,24 @@ server.use(restify.plugins.bodyParser())
 server.pre(cors.preflight)
 server.use(cors.actual)
 
-server.get('/hello/:name', api.respond)
-server.post('/game/create', api.newGame)
-server.get('/game/deal/:gameId', api.dealCards)
-server.get('/game/placebet/:gameId/:amount', api.placeBet)
+server.get('/hello/:name', buildRequestHandler(api.respond))
+server.post('/game/create', buildRequestHandler(api.newGame))
+server.get('/game/deal/:gameId', buildRequestHandler(api.dealCards))
+server.get('/game/placebet/:gameId/:amount', buildRequestHandler(api.placeBet))
 
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url)
 })
+
+export function buildRequestHandler (func: Function) {
+  return async (req: any, res: any, next: any) => {
+    try {
+      await func(req, res)
+    } catch(err) {
+      console.log(err)
+      res.send(500)
+    } finally {
+      next()
+    }
+  }
+}
