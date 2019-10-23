@@ -78,12 +78,16 @@ export class Game {
     return cards.length === 2 && cards[0].value === cards[1].value
   }
 
+  private static canDouble (cards: card[]): boolean {
+    return cards.length === 2
+  }
+
   static makeHand (cards: card[], bet: number = 100): hand {
     return {
       id: uuidv1(),
       active: false,
       splittable: this.isSplittable(cards),
-      canDouble: true,
+      canDouble: this.canDouble(cards),
       canForfeit: false,
       isBust: false,
       isFinished: false,
