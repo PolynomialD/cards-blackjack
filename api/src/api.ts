@@ -22,3 +22,10 @@ export async function placeBet(req: any, res: any) {
   const game = await Game.placeBet(gameId, amount)
   res.send(game)
 }
+
+export async function dealCardToHand(req: any, res: any) {
+  const gameId = req.params.gameId
+  const handId = req.params.handId
+  const game = await Game.dealCardToHand(gameId, handId)
+  res.send(game)
+}
