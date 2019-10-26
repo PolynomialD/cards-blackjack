@@ -14,7 +14,7 @@ class App extends React.Component {
   constructor(props: any) {
     super(props);
     this.newGame = this.newGame.bind(this);
-}
+  }
 
   componentDidMount() {
     axios.get(`${server}/hello/world`)

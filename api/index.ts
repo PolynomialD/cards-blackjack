@@ -16,6 +16,7 @@ server.get('/hello/:name', buildRequestHandler(api.respond))
 server.post('/game/create', buildRequestHandler(api.newGame))
 server.get('/game/deal/:gameId', buildRequestHandler(api.dealCards))
 server.get('/game/placebet/:gameId/:amount', buildRequestHandler(api.placeBet))
+server.get('/game/dealCardToHand/:gameId/:handId', buildRequestHandler(api.dealCardToHand))
 
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url)
