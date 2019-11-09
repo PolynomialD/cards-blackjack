@@ -197,9 +197,11 @@ describe('Deck', () => {
     verify.it('should mark a hand as splittable, if cards are equal value', Gen.integerBetween(1, 11), async (value) => {
       const cards: card[] = [{
         face: 'test',
+        image: '',
         value
       }, {
         face: 'test',
+        image: '',
         value
       }]
       Game.makeHand(cards).splittable.should.eql(true)

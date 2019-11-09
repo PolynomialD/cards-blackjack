@@ -7,6 +7,7 @@ export type game = {
 }
 
 export type card = {
+  readonly image: string,
   readonly face: string,
   readonly value: number
 }

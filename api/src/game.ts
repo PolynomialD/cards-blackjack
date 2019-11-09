@@ -9,7 +9,7 @@ type bob = {
 }
 
 export class Game {
-  static async newGame (player: player, decks: number = 1) {
+  static async newGame (player: player, decks: number = 100) {
     const data: game = {
       id: uuidv1(),
       shoe: buildShoe(decks),
@@ -48,7 +48,6 @@ export class Game {
     return savedGame
   }
 
-  // to-do
   static async dealCardToHand (gameId: string, handId: string) {
     const game = await mongoRepository.getGame(gameId) as game
 
@@ -59,6 +58,8 @@ export class Game {
       shoe,
       seats: this.giveHandCard(handId, card, game.seats)
     })
+    const savedGame = await mongoRepository.getGame(gameId)
+    return savedGame
   }
 
   static async dealCardToDealer (gameId: string) {
@@ -75,11 +76,7 @@ export class Game {
   }
 
   private static isSplittable (cards: card[]): boolean {
-    return cards.length === 2 && cards[0].value === cards[1].value
-  }
-
-  private static canDouble (cards: card[]): boolean {
-    return cards.length === 2
+    return cards.length === 2 && cards[0].face === cards[1].face
   }
 
   static makeHand (cards: card[], bet: number = 100): hand {
@@ -87,8 +84,8 @@ export class Game {
       id: uuidv1(),
       active: false,
       splittable: this.isSplittable(cards),
-      canDouble: this.canDouble(cards),
-      canForfeit: false,
+      canDouble: true,
+      canForfeit: true,
       isBust: false,
       isFinished: false,
       bet,
@@ -105,7 +102,9 @@ export class Game {
           if (hand.id === handId) {
             return {
               ...hand,
+              splittable: false,
               canDouble: false,
+              canForfeit: false,
               cards: [...hand.cards, card]
             }
           }

@@ -17,6 +17,10 @@
   color: white;
 }
 
+.card-text, .card-title {
+  color: #333;
+}
+
 .App-link {
   color: #09d3ac;
 }

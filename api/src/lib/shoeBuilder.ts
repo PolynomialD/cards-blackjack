@@ -12,7 +12,8 @@ export function buildDeck (suits: suit[], values: value[]): card[] {
   return suits.reduce((deck: card[], suit) => {
     const cards = values.map((value) => {
       return {
-        face: `${value[0]} of ${suit}`,
+        face: value[0],
+        image: `${value[0]}_of_${suit}`,
         value: value[1]
       }
     })
